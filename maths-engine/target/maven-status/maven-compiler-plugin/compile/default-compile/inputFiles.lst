@@ -1,0 +1,9 @@
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/vector/Vector4D.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/vector/Vector.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/vector/AbstractVector.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/vector/Vector2D.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/matrix/Matrix.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/matrix/Matrix3x3.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/matrix/Matrix4x4.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/vector/Vector3D.java
+/data/my-projects/game-engine/maths-engine/src/main/java/org/clowdy/maths/matrix/AbstractMatrix.java

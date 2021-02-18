@@ -1,0 +1,3 @@
+org/clowdy/entity/component/Component.class
+org/clowdy/entity/Entity.class
+org/clowdy/entity/EntityBuilder.class
