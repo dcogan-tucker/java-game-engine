@@ -1,9 +1,0 @@
-org/clowdy/maths/matrix/Matrix4x4.class
-org/clowdy/maths/matrix/Matrix.class
-org/clowdy/maths/vector/Vector.class
-org/clowdy/maths/vector/Vector4D.class
-org/clowdy/maths/matrix/Matrix3x3.class
-org/clowdy/maths/vector/Vector2D.class
-org/clowdy/maths/vector/Vector3D.class
-org/clowdy/maths/matrix/AbstractMatrix.class
-org/clowdy/maths/vector/AbstractVector.class
