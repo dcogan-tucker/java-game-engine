@@ -1,7 +1,9 @@
 package org.clowdy.entity;
 
-import org.clowdy.entity.component.Component;
+import org.clowdy.component.*;
+import org.clowdy.component.Component.PoolType;
 
+import javax.inject.Singleton;
 import java.util.*;
 
 /**
@@ -10,14 +12,20 @@ import java.util.*;
 public class Entity
 {
 	// Entity unique identifier.
-	private final UUID ID;
+	private final UUID id;
 	// Map limits entity to have one instance of each component class.
-	private final Map<Class<? extends Component>, Component> COMPONENTS = new HashMap<>();
+	private final Map<Class<? extends Component>, Component> components = new HashMap<>();
+	// Map of Component pools.
+	private final Map<PoolType, ComponentPool> componentPools = new HashMap<>();
+	// Manages all system components.
+	private final ComponentManager componentManager;
+
 
 	// Protected to ensure only EntityBuilder is used to create entities.
-	protected Entity()
+	protected Entity(ComponentManager componentManager)
 	{
-		ID = UUID.randomUUID();
+		id = UUID.randomUUID();
+		this.componentManager = componentManager;
 	}
 
 	/**
@@ -27,7 +35,7 @@ public class Entity
 	 */
 	public UUID getId()
 	{
-		return ID;
+		return id;
 	}
 
 	/**
@@ -43,8 +51,24 @@ public class Entity
 		Component previous;
 		if (component != null)
 		{
-			previous = COMPONENTS.putIfAbsent(component.getClass(), component);
-			return previous == null;
+			previous = components.putIfAbsent(component.getClass(), component);
+			if (previous == null)
+			{
+				PoolType[] poolTypes = component.getPoolTypes();
+				ComponentPool pool;
+				for (PoolType poolType : poolTypes)
+				{
+					pool = componentPools.get(poolType);
+					if (pool == null)
+					{
+						pool = new ComponentPool(poolType);
+					}
+					pool.addComponent(component);
+					componentPools.put(poolType, pool);
+					componentManager.put(pool);
+				}
+				return true;
+			}
 		}
 		return false;
 	}
@@ -57,7 +81,7 @@ public class Entity
 	 */
 	public boolean hasComponent(Class<? extends Component> componentClass)
 	{
-		return COMPONENTS.containsKey(componentClass);
+		return components.containsKey(componentClass);
 	}
 
 	/**
@@ -68,7 +92,7 @@ public class Entity
 	 */
 	public boolean hasComponent(Component component)
 	{
-		return COMPONENTS.containsValue(component);
+		return components.containsValue(component);
 	}
 
 	/**
@@ -81,7 +105,19 @@ public class Entity
 	 */
 	public Component getComponent(Class<? extends Component> componentClass)
 	{
-		return COMPONENTS.get(componentClass);
+		return components.get(componentClass);
+	}
+
+	/**
+	 * Returns the ComponentPool of the given type held by this Entity. If there is no pool of the given
+	 * type null is returned.
+	 *
+	 * @param poolType The type of ComponentPool.
+	 * @return The ComponentPool of the given type, null if there is no pool of that type.
+	 */
+	public ComponentPool getComponentPool(PoolType poolType)
+	{
+		return componentPools.get(poolType);
 	}
 
 	/**
@@ -91,7 +127,17 @@ public class Entity
 	 */
 	public List<Component> getAllComponents()
 	{
-		return new ArrayList<>(COMPONENTS.values());
+		return new ArrayList<>(components.values());
+	}
+
+	/**
+	 * Returns a List of all the ComponentPool instances belonging to this Entity.
+	 *
+	 * @return A List of all the ComponentPool instances belonging to this Entity.
+	 */
+	public List<ComponentPool> getAllComponentPools()
+	{
+		return new ArrayList<>(componentPools.values());
 	}
 
 	/**
@@ -104,7 +150,30 @@ public class Entity
 	 */
 	public Component removeComponent(Class<? extends Component> componentClass)
 	{
-		return COMPONENTS.remove(componentClass);
+		Component currentComponent = components.remove(componentClass);
+		if (currentComponent != null)
+		{
+			PoolType[] poolTypes = currentComponent.getPoolTypes();
+			ComponentPool pool;
+			for (PoolType poolType : poolTypes)
+			{
+				pool = componentPools.get(poolType);
+				if (pool != null)
+				{
+					pool.removeComponent(currentComponent);
+					if (pool.getSize() == 0)
+					{
+						componentPools.remove(poolType);
+						componentManager.remove(pool);
+					}
+					else
+					{
+						componentManager.put(pool);
+					}
+				}
+			}
+		}
+		return currentComponent;
 	}
 
 	/**
@@ -112,7 +181,10 @@ public class Entity
 	 */
 	public void clear()
 	{
-		COMPONENTS.clear();
+		components.clear();
+		componentPools.values()
+				.forEach(componentManager::remove);
+		componentPools.clear();
 	}
 
 	/**
@@ -125,8 +197,12 @@ public class Entity
 	@Override
 	public boolean equals(Object object)
 	{
-		Entity otherEntity = (Entity) object;
-		return Objects.equals(COMPONENTS, otherEntity.COMPONENTS);
+		if (object instanceof Entity)
+		{
+			Entity otherEntity = (Entity) object;
+			return Objects.equals(components, otherEntity.components);
+		}
+		return false;
 	}
 
 	/**
@@ -137,6 +213,48 @@ public class Entity
 	@Override
 	public int hashCode()
 	{
-		return Objects.hash(COMPONENTS);
+		return Objects.hash(components);
+	}
+
+	/**
+	 *
+	 */
+	@Singleton
+	public static class ComponentManager
+	{
+		// Map of ComponentPools for each PoolType.
+		private final Map<PoolType, Map<UUID, ComponentPool>> componentPools = new HashMap<>();
+
+		// Puts the given ComponentPool into the map.
+		protected void put(ComponentPool componentPool)
+		{
+			PoolType poolType = componentPool.getPoolType();
+			Map<UUID, ComponentPool> componentPoolType = getComponentPoolType(poolType);
+			if (componentPoolType == null)
+			{
+				componentPoolType = new HashMap<>();
+			}
+			componentPoolType.put(componentPool.getId(), componentPool);
+			componentPools.put(poolType, componentPoolType);
+		}
+
+		// Removed the given ComponentPool from the map.
+		protected void remove(ComponentPool componentPool)
+		{
+			PoolType poolType = componentPool.getPoolType();
+			Map<UUID, ComponentPool> componentPoolType = getComponentPoolType(poolType);
+			componentPoolType.remove(componentPool.getId(), componentPool);
+			componentPools.put(poolType, componentPoolType);
+		}
+
+		/**
+		 * Returns a Map of all ComponentPools of the given type.
+		 * @param poolType The type of pool.
+		 * @return A Map of all ComponentPools of the given type.
+		 */
+		public Map<UUID, ComponentPool> getComponentPoolType(PoolType poolType)
+		{
+			return componentPools.get(poolType);
+		}
 	}
 }
