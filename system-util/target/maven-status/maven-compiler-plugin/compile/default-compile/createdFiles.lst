@@ -1,2 +1,2 @@
-org/clowdy/ReflectionEqualsHelper.class
-org/clowdy/StringFormatter.class
+org/clowdy/util/StringFormatter.class
+org/clowdy/util/ReflectionEqualsHelper.class

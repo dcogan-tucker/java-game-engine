@@ -1,3 +1,13 @@
-org/clowdy/entity/component/Component.class
+org/clowdy/util/DaggerEntityBuilderFactory.class
 org/clowdy/entity/Entity.class
+org/clowdy/util/EntityBuilderModule_ProvideComponentManagerFactory.class
+org/clowdy/component/Component.class
+org/clowdy/util/DaggerEntityBuilderFactory$Builder.class
+org/clowdy/component/Component$PoolType.class
+org/clowdy/component/ComponentPool.class
+org/clowdy/util/EntityBuilderModule_ProvideComponentManagerFactory$InstanceHolder.class
 org/clowdy/entity/EntityBuilder.class
+org/clowdy/entity/EntityBuilder_Factory.class
+org/clowdy/util/EntityBuilderFactory.class
+org/clowdy/util/EntityBuilderModule.class
+org/clowdy/entity/Entity$ComponentManager.class

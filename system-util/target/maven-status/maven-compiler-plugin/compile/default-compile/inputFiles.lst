@@ -1,2 +1,2 @@
-/data/my-projects/game-engine/system-util/src/main/java/org/clowdy/ReflectionEqualsHelper.java
-/data/my-projects/game-engine/system-util/src/main/java/org/clowdy/StringFormatter.java
+/data/my-projects/game-engine/system-util/src/main/java/org/clowdy/util/StringFormatter.java
+/data/my-projects/game-engine/system-util/src/main/java/org/clowdy/util/ReflectionEqualsHelper.java
