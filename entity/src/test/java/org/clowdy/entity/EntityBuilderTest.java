@@ -1,6 +1,9 @@
 package org.clowdy.entity;
 
-import org.clowdy.entity.component.Component;
+import org.clowdy.component.Component;
+import org.clowdy.entity.Entity.ComponentManager;
+import org.clowdy.component.TestPhysicsComponent;
+import org.clowdy.util.DaggerEntityBuilderFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,24 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("EntityBuilder Tests")
 public class EntityBuilderTest
 {
-	private static class TestComponent extends Component
-	{
-		public float a;
-	}
-
-	private static final EntityBuilder entityBuilder = new EntityBuilder();
-	private static Component component = new TestComponent();
+	private static EntityBuilder entityBuilder = DaggerEntityBuilderFactory.create().getBuilder();
+	private static Component physicsComponent;
 
 	private static Entity entity;
 
 	@BeforeEach
 	void setUp()
 	{
-		component = new TestComponent();
+		entityBuilder = new EntityBuilder(new ComponentManager());
+		physicsComponent = new TestPhysicsComponent();
 	}
 
 	@Test
-	@DisplayName("Two Built Entities Have Different IDs")
+	@DisplayName("Each Built Entity Has a Different ID")
 	void buildEntityCreatesEntityWithUniqueID()
 	{
 		entity = entityBuilder.buildEntity();
@@ -40,33 +39,33 @@ public class EntityBuilderTest
 	@DisplayName("EntityBuilder with a Component Adds it to the Entity")
 	void buildEntityWithAComponentCreatesEntityContainingThatComponent()
 	{
-		entity = entityBuilder.withComponent(component)
+		entity = entityBuilder.withComponent(physicsComponent)
 				.buildEntity();
 
-		assertTrue(entity.hasComponent(TestComponent.class));
+		assertTrue(entity.hasComponent(TestPhysicsComponent.class));
 	}
 
 	@Test
 	@DisplayName("EntityBuilder with Multiple Instances of a Component Class Adds Only the First to the Entity")
 	void buildEntityWithComponentsOfSameComponentClassCreatesEntityContainingFirstComponent()
 	{
-		Component component2 = new TestComponent();
-		((TestComponent) component2).a = 0.1f;
+		TestPhysicsComponent secondPhysicsComponent = new TestPhysicsComponent();
+		secondPhysicsComponent.a = 0.1f;
 
-		entity = entityBuilder.withComponent(component)
-				.withComponent(component2)
+		entity = entityBuilder.withComponent(physicsComponent)
+				.withComponent(secondPhysicsComponent)
 				.buildEntity();
 
-		assertTrue(entity.hasComponent(TestComponent.class));
-		assertTrue(entity.hasComponent(component));
-		assertFalse(entity.hasComponent(component2));
+		assertTrue(entity.hasComponent(TestPhysicsComponent.class));
+		assertTrue(entity.hasComponent(physicsComponent));
+		assertFalse(entity.hasComponent(secondPhysicsComponent));
 	}
 
 	@Test
 	@DisplayName("Copy Entity with EntityBuilder Creates Entity with Equal Components but Different ID")
 	void copyOfEntityIsEqualToOriginalButHasDifferentID()
 	{
-		Entity entityToClone = entityBuilder.withComponent(component)
+		Entity entityToClone = entityBuilder.withComponent(physicsComponent)
 				.buildEntity();
 
 		entity = entityBuilder.copyEntity(entityToClone)
