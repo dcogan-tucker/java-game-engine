@@ -1,8 +1,10 @@
 package org.clowdy.entity;
 
 import com.rits.cloning.Cloner;
-import org.clowdy.entity.component.Component;
+import org.clowdy.component.Component;
+import org.clowdy.entity.Entity.ComponentManager;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,11 +13,20 @@ import java.util.Map;
  */
 public class EntityBuilder
 {
-	// Cloner to create deep copies of components.
-	private static final Cloner CLONER = new Cloner();
-
 	// Map of Component to be added to Entity on build call.
 	private final Map<Class<? extends Component>, Component> COMPONENTS = new HashMap<>();
+
+	private final ComponentManager componentManager;
+
+	/**
+	 *
+	 * @param componentManager
+	 */
+	@Inject
+	protected EntityBuilder(ComponentManager componentManager)
+	{
+		this.componentManager = componentManager;
+	}
 
 	/**
 	 * Return this EntityBuilder after deep copying all Components of the given Entity.
@@ -25,8 +36,9 @@ public class EntityBuilder
 	 */
 	public EntityBuilder copyEntity(Entity entity)
 	{
+		Cloner cloner = new Cloner();
 		entity.getAllComponents().forEach(component ->
-				COMPONENTS.put(component.getClass(), CLONER.deepClone(component)));
+				COMPONENTS.put(component.getClass(), cloner.deepClone(component)));
 		return this;
 	}
 
@@ -51,9 +63,8 @@ public class EntityBuilder
 	 */
 	public Entity buildEntity()
 	{
-		Entity entity = new Entity();
-		COMPONENTS.values().forEach(component ->
-				entity.addComponent(component));
+		Entity entity = new Entity(componentManager);
+		COMPONENTS.values().forEach(entity::addComponent);
 		COMPONENTS.clear();
 		return entity;
 	}
