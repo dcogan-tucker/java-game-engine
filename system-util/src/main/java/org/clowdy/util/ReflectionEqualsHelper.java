@@ -1,4 +1,4 @@
-package org.clowdy;
+package org.clowdy.util;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
