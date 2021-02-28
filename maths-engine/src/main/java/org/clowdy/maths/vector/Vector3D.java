@@ -1,6 +1,6 @@
 package org.clowdy.maths.vector;
 
-import org.clowdy.StringFormatter;
+import org.clowdy.util.StringFormatter;
 
 /**
  * Extending the abstract Vector class, Vector3D represents a Vector in 3-dimensional
@@ -184,9 +184,9 @@ public class Vector3D extends AbstractVector<Vector3D>
 	@Override
 	public String toString()
 	{
-		String xString = StringFormatter.removeTraillingZero(x);
-		String yString = StringFormatter.removeTraillingZero(y);
-		String zString = StringFormatter.removeTraillingZero(z);
+		String xString = StringFormatter.removeTrailingZero(x);
+		String yString = StringFormatter.removeTrailingZero(y);
+		String zString = StringFormatter.removeTrailingZero(z);
 		return "(" + xString + ", " + yString + ", " + zString + ")";
 	}
 

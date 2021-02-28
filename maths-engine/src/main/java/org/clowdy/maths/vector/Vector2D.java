@@ -1,6 +1,6 @@
 package org.clowdy.maths.vector;
 
-import org.clowdy.StringFormatter;
+import org.clowdy.util.StringFormatter;
 
 /**
  * Extending the abstract Vector class, Vector2D represents a Vector in 2-dimensional
@@ -154,8 +154,8 @@ public class Vector2D extends AbstractVector<Vector2D>
 	@Override
 	public String toString()
 	{
-		String xString = StringFormatter.removeTraillingZero(x);
-		String yString = StringFormatter.removeTraillingZero(y);
+		String xString = StringFormatter.removeTrailingZero(x);
+		String yString = StringFormatter.removeTrailingZero(y);
 		return "(" + xString + ", " + yString + ")";
 	}
 

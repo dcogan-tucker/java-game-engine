@@ -1,6 +1,6 @@
 package org.clowdy.maths.vector;
 
-import org.clowdy.ReflectionEqualsHelper;
+import org.clowdy.util.ReflectionEqualsHelper;
 
 /**
  * <p>An abstract Vector class that implements the Vector interface as well as providing

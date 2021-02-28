@@ -1,6 +1,6 @@
 package org.clowdy.maths.vector;
 
-import org.clowdy.StringFormatter;
+import org.clowdy.util.StringFormatter;
 
 /**
  * Extending the abstract Vector class, Vector4D represents a Vector in 4-dimensional
@@ -177,10 +177,10 @@ public class Vector4D extends AbstractVector<Vector4D>
 	@Override
 	public String toString()
 	{
-		String xString = StringFormatter.removeTraillingZero(x);
-		String yString = StringFormatter.removeTraillingZero(y);
-		String zString = StringFormatter.removeTraillingZero(z);
-		String wString = StringFormatter.removeTraillingZero(w);
+		String xString = StringFormatter.removeTrailingZero(x);
+		String yString = StringFormatter.removeTrailingZero(y);
+		String zString = StringFormatter.removeTrailingZero(z);
+		String wString = StringFormatter.removeTrailingZero(w);
 		return "(" + xString + ", " + yString +
 				", " + zString + ", " + wString + ")";
 	}
