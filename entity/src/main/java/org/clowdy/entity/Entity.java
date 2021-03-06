@@ -1,6 +1,5 @@
 package org.clowdy.entity;
 
-import org.checkerframework.checker.units.qual.C;
 import org.clowdy.component.*;
 import org.clowdy.component.Component.PoolType;
 
