@@ -1,7 +1,6 @@
 package org.clowdy.entity;
 
 import org.clowdy.component.Component;
-import org.clowdy.component.ComponentPool;
 import org.clowdy.component.TestPhysicsComponent;
 import org.clowdy.component.TestRenderComponent;
 import org.hamcrest.MatcherAssert;
@@ -175,9 +174,9 @@ public class EntityTest {
     void getComponentPoolOfTypeOfAnAddedComponentReturnsComponentPoolWithThatEntity() {
         entity1.addComponent(physicsComponent1);
 
-        ComponentPool actual = entity1.getComponentPool(Component.PoolType.PHYSICS);
+        Entity.ComponentPool actual = entity1.getComponentPool(Component.PoolType.PHYSICS);
 
-        ComponentPool expected = new ComponentPool(Component.PoolType.PHYSICS);
+        Entity.ComponentPool expected = new Entity.ComponentPool(Component.PoolType.PHYSICS);
         expected.addComponent(physicsComponent1);
 
         assertEquals(expected, actual);
@@ -202,13 +201,13 @@ public class EntityTest {
     void getAllComponentPoolsReturnsListOfComponentsAddedInComponentPools() {
         entity1.addComponent(physicsComponent1);
 
-        List<ComponentPool> actual = entity1.getAllComponentPools();
+        List<Entity.ComponentPool> actual = entity1.getAllComponentPools();
 
-        ComponentPool physicPool = new ComponentPool(Component.PoolType.PHYSICS);
+        Entity.ComponentPool physicPool = new Entity.ComponentPool(Component.PoolType.PHYSICS);
         physicPool.addComponent(physicsComponent1);
-        ComponentPool testPool = new ComponentPool(Component.PoolType.TEST);
+        Entity.ComponentPool testPool = new Entity.ComponentPool(Component.PoolType.TEST);
         testPool.addComponent(physicsComponent1);
-        List<ComponentPool> expected = Arrays.asList(physicPool, testPool);
+        List<Entity.ComponentPool> expected = Arrays.asList(physicPool, testPool);
 
         MatcherAssert.assertThat(actual, containsInAnyOrder(expected.toArray()));
     }
