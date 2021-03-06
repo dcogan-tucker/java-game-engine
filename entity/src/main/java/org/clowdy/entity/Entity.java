@@ -16,6 +16,8 @@ import java.util.*;
  *
  * <p>Entities should be created through the EntityBuilder class to allow for chain calling the addition
  * of components..</p>
+ *
+ * @author Dominic Cogan-Tucker
  */
 public class Entity {
     // Entity unique identifier.
@@ -62,10 +64,10 @@ public class Entity {
                     pool = componentPools.get(poolType);
                     if (pool == null) {
                         pool = new ComponentPool(poolType);
+                        componentPools.put(poolType, pool);
+                        componentManager.put(pool);
                     }
                     pool.addComponent(component);
-                    componentPools.put(poolType, pool);
-                    componentManager.put(pool);
                 }
                 return true;
             }
@@ -154,8 +156,6 @@ public class Entity {
                     if (pool.getSize() == 0) {
                         componentPools.remove(poolType);
                         componentManager.remove(pool);
-                    } else {
-                        componentManager.put(pool);
                     }
                 }
             }
@@ -200,10 +200,111 @@ public class Entity {
     }
 
     /**
+     *
+     */
+    public static class ComponentPool {
+        // Unique id.
+        private final UUID id;
+        // PoolType for this ComponentPool.
+        private final PoolType poolType;
+        // Map of components.
+        private final Map<Class<? extends Component>, Component> components = new HashMap<>();
+        // Number of components in pool.
+        private int size;
+
+        /**
+         * Constructs a ComponentPool with the given PoolType.
+         * @param poolType The PoolType for this ComponentPool.
+         */
+        protected ComponentPool(Component.PoolType poolType) {
+            id = UUID.randomUUID();
+            this.poolType = poolType;
+        }
+
+        /**
+         * Returns the UUID for this ComponentPool.
+         * @return This ComponentPool's UUID.
+         */
+        public UUID getId() {
+            return id;
+        }
+
+        /**
+         * Returns the type of this ComponentPool.
+         * @return The PoolType this ComponentPool is associated with.
+         */
+        public PoolType getPoolType() {
+            return poolType;
+        }
+
+        /**
+         * Returns the number of Components in this ComponentPool.
+         * @return The number of Components in this ComponentPool.
+         */
+        public int getSize() {
+            return size;
+        }
+
+        // Add Component to the ComponentPool.
+        protected void addComponent(Component component) {
+            components.put(component.getClass(), component);
+            size++;
+        }
+
+        // Remove Component from the ComponentPool.
+        protected void removeComponent(Component component) {
+            components.remove(component.getClass(), component);
+            size--;
+        }
+
+        /**
+         * Returns the Component of the given Class if it exists within the pool, otherwise returns
+         * null.
+         *
+         * @param componentClass The Component Class to get.
+         *
+         * @return The Component of the given Class inside the pool, null if one doesn't exist.
+         */
+        public Component getComponent(Class<? extends Component> componentClass) {
+            return components.get(componentClass);
+        }
+
+        /**
+         * Returns true if the given Object is an instance of Component Pool that contains equal components
+         * and is of the same PoolType, false otherwise.
+         *
+         * @param other The other Object to check against.
+         *
+         * @return true if the given Object is a ComponentPool of the same PoolType and contains equal components.
+         */
+        @Override
+        public boolean equals(Object other) {
+            if (other instanceof ComponentPool) {
+                ComponentPool otherComponentPool = (ComponentPool) other;
+                return Objects.equals(components, otherComponentPool.components) &&
+                        Objects.equals(poolType, otherComponentPool.poolType);
+            }
+            return false;
+        }
+
+        /**
+         * Returns the hash code for this ComponentPool.
+         *
+         * @return the hash code for this ComponentPool.
+         */
+        @Override
+        public int hashCode() {
+            return Objects.hash(components, poolType);
+        }
+    }
+
+    /**
      * <p>A singleton Class that manages the storage of all ComponentPools of all entities. The content
      * of the class is automatically updated when entities are created, modified and deleted. The obtainable
      * map of a given PoolType is unmodifiable, any attempt to modify the map directly or via its
      * iterator will result in an UnsupportedOperationException.
+     *
+     * @author Dominic Cogan-Tucker
      */
     @Singleton
     public static class ComponentManager {
