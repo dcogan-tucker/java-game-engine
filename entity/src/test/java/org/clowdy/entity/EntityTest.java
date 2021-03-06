@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Entity Tests")
 public class EntityTest {
+    private static final Component renderComponent = new TestRenderComponent();
     private static Entity entity1, entity2;
     private static Component physicsComponent1, physicsComponent2;
-    private static final Component renderComponent = new TestRenderComponent();
 
     @BeforeEach
     void setUp() {
@@ -72,8 +72,7 @@ public class EntityTest {
     @Test
     @DisplayName("Check if Has Null Class Value Returns False")
     void hasComponentOnNullClassValueReturnsFalse() {
-        Class<? extends Component> nullClass = null;
-        assertFalse(entity1.hasComponent(nullClass));
+        assertFalse(entity1.hasComponent((Class<? extends Component>) null));
     }
 
     @Test
@@ -109,9 +108,7 @@ public class EntityTest {
     @Test
     @DisplayName("Check if Has Component That is Null Returns False")
     void hasComponentOnNullComponentReturnsFalse() {
-        physicsComponent1 = null;
-
-        assertFalse(entity1.hasComponent(physicsComponent1));
+        assertFalse(entity1.hasComponent((Component) null));
     }
 
     @Test
@@ -194,6 +191,35 @@ public class EntityTest {
     @DisplayName("Get ComponentPool of Null Returns Null")
     void getComponentPoolOfNullReturnsNull() {
         assertNull(entity1.getComponentPool(null));
+    }
+
+    @Test
+    @DisplayName("Get Component Class From ComponentPool That Was Added to Entity")
+    void getComponentClassFromComponentPoolThatWasAddedToEntity() {
+        entity1.addComponent(physicsComponent1);
+        Entity.ComponentPool componentPool = entity1.getComponentPool(Component.PoolType.TEST);
+
+        Component actual = componentPool.getComponent(TestPhysicsComponent.class);
+
+        assertEquals(physicsComponent1, actual);
+    }
+
+    @Test
+    @DisplayName("Get Component Class From ComponentPool That Was Not Added to Entity Returns Null")
+    void getComponentClassFromComponentPoolThatWasNotAddedToEntityReturnsNull() {
+        entity1.addComponent(physicsComponent1);
+        Entity.ComponentPool componentPool = entity1.getComponentPool(Component.PoolType.TEST);
+
+        assertNull(componentPool.getComponent(TestRenderComponent.class));
+    }
+
+    @Test
+    @DisplayName("Get Null From ComponentPool Returns Null")
+    void getNullFromComponentPoolReturnsNull() {
+        entity1.addComponent(physicsComponent1);
+        Entity.ComponentPool componentPool = entity1.getComponentPool(Component.PoolType.TEST);
+
+        assertNull(componentPool.getComponent(null));
     }
 
     @Test
