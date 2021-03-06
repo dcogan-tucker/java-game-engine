@@ -7,210 +7,192 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public abstract class VectorTest<V extends AbstractVector<V>>
-{
-	protected V vector;
+public abstract class VectorTest<V extends AbstractVector<V>> {
+    protected V vector;
 
-	protected abstract V newVectorInstance();
+    protected abstract V newVectorInstance();
 
-	@BeforeEach
-	public void setUp()
-	{
-		vector = newVectorInstance();
-	}
+    @BeforeEach
+    public void setUp() {
+        vector = newVectorInstance();
+    }
 
-	// Add Method Tests
-	@Test
-	public void addOtherVectorToVectorReturnsVector()
-	{
-		/* Setting up to 4 values, implementation uses number of values
-		 * up to their number of dimension.
-		 */
-		vector.set(1, 2, 3, 4);
+    // Add Method Tests
+    @Test
+    public void addOtherVectorToVectorReturnsVector() {
+        /* Setting up to 4 values, implementation uses number of values
+         * up to their number of dimension.
+         */
+        vector.set(1, 2, 3, 4);
 
-		V otherVector = newVectorInstance().set(4, 3, 2, 1);
+        V otherVector = newVectorInstance().set(4, 3, 2, 1);
 
-		V actual = vector.add(otherVector);
-		V expected = newVectorInstance().set(5, 5, 5, 5);
+        V actual = vector.add(otherVector);
+        V expected = newVectorInstance().set(5, 5, 5, 5);
 
-		// The calling instance should be returned.
-		assertTrue(actual == vector);
-		// The actual field values should equal the expected.
-		assertEquals(expected, actual);
-	}
+        // The calling instance should be returned.
+        assertSame(actual, vector);
+        // The actual field values should equal the expected.
+        assertEquals(expected, actual);
+    }
 
-	@Test
-	public void addNullToVectorThrowsIllegalArgumentException()
-	{
-		assertThrows(IllegalArgumentException.class, () -> vector.add(null),
-				"The input Vector cannot be null.");
-	}
+    @Test
+    public void addNullToVectorThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> vector.add(null),
+                "The input Vector cannot be null.");
+    }
 
 
-	// Subtract Method Tests
+    // Subtract Method Tests
 
-	@Test
-	public void subtractOtherVectorFromVectorReturnsVector()
-	{
-		vector.set(-1, 2, -3, 4);
+    @Test
+    public void subtractOtherVectorFromVectorReturnsVector() {
+        vector.set(-1, 2, -3, 4);
 
-		V otherVector = newVectorInstance().set(1, 2, 3, 4);
+        V otherVector = newVectorInstance().set(1, 2, 3, 4);
 
-		V actual = vector.subtract(otherVector);
-		V expected = newVectorInstance().set(-2, 0, -6, 0);
+        V actual = vector.subtract(otherVector);
+        V expected = newVectorInstance().set(-2, 0, -6, 0);
 
-		assertTrue(actual == vector);
-		assertEquals(expected, actual);
-	}
+        assertSame(actual, vector);
+        assertEquals(expected, actual);
+    }
 
-	@Test
-	public void subtractNullFromVectorThrowsIllegalArgumentException()
-	{
-		assertThrows(IllegalArgumentException.class, () -> vector.subtract(null),
-				"The input Vector cannot be null.");
-	}
+    @Test
+    public void subtractNullFromVectorThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> vector.subtract(null),
+                "The input Vector cannot be null.");
+    }
 
 
-	// Multiply Method Tests
+    // Multiply Method Tests
 
-	@Test
-	public void multiplyVectorByScalarValueReturnsVector()
-	{
-		vector.set(3, -7, 11, 6);
+    @Test
+    public void multiplyVectorByScalarValueReturnsVector() {
+        vector.set(3, -7, 11, 6);
 
-		V actual = vector.multiply(10);
-		V expected = newVectorInstance().set(30, -70, 110, 60);
+        V actual = vector.multiply(10);
+        V expected = newVectorInstance().set(30, -70, 110, 60);
 
-		assertTrue(actual == vector);
-		assertEquals(expected, actual);
-	}
+        assertSame(actual, vector);
+        assertEquals(expected, actual);
+    }
 
-	@Test
-	public void dotProductOfVectorAndNullThrowsIllegalArgumentException()
-	{
-		assertThrows(IllegalArgumentException.class, () -> vector.dot(null),
-				"The input Vector cannot be null.");
-	}
+    @Test
+    public void dotProductOfVectorAndNullThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> vector.dot(null),
+                "The input Vector cannot be null.");
+    }
 
 
-	// Divide Method Tests
+    // Divide Method Tests
 
-	@Test
-	public void divideVectorByNonZeroReturnsVector()
-	{
-		vector.set(11, -5, 4, -6);
+    @Test
+    public void divideVectorByNonZeroReturnsVector() {
+        vector.set(11, -5, 4, -6);
 
-		float scalar = -1.5f;
-		V actual = vector.divide(scalar);
-		V expected = newVectorInstance().set(11, -5, 4, -6).multiply(1f / scalar);
+        float scalar = -1.5f;
+        V actual = vector.divide(scalar);
+        V expected = newVectorInstance().set(11, -5, 4, -6).multiply(1f / scalar);
 
-		assertTrue(actual == vector);
-		assertEquals(expected, actual);
-	}
+        assertSame(actual, vector);
+        assertEquals(expected, actual);
+    }
 
-	@Test
-	public void divideVectorByZeroThrowsIllegalArgumentException()
-	{
-		assertThrows(IllegalArgumentException.class, () -> vector.divide(0),
-				"Can't divide a vector by 0.");
-	}
+    @Test
+    public void divideVectorByZeroThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> vector.divide(0),
+                "Can't divide a vector by 0.");
+    }
 
 
-	// Negate Method Tests
+    // Negate Method Tests
 
-	@Test
-	public void negateVectorReturnsVector()
-	{
-		vector.set(-1, 4, -100, 0);
+    @Test
+    public void negateVectorReturnsVector() {
+        vector.set(-1, 4, -100, 0);
 
-		V actual = vector.negate();
-		V expected = newVectorInstance().set(1, -4, 100, 0);
+        V actual = vector.negate();
+        V expected = newVectorInstance().set(1, -4, 100, 0);
 
-		assertTrue(actual == vector);
-		assertEquals(expected, actual);
-	}
-
-
-	// Normalise Method Tests
-
-	@Test
-	public void normaliseNonZeroVectorReturnsVector()
-	{
-		vector.set(25, -4, 3, 2);
-		float length = vector.length();
-
-		V actual = vector.normalise();
-		V expected = vector.set(25, -4, 3, 2).divide(length);
-
-		assertTrue(actual == vector);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void normaliseZeroVectorThrowsIllegalArgumentException()
-	{
-		assertThrows(IllegalStateException.class, () -> vector.normalise(),
-				"Can not normalise a vector of zero length.");
-	}
+        assertSame(actual, vector);
+        assertEquals(expected, actual);
+    }
 
 
-	// Angle Method Tests
+    // Normalise Method Tests
 
-	@Test
-	public void angleBetweenTwoNonZeroVectors()
-	{
-		vector.set(-2, 4, -3, 2);
+    @Test
+    public void normaliseNonZeroVectorReturnsVector() {
+        vector.set(25, -4, 3, 2);
+        float length = vector.length();
 
-		V otherVector = newVectorInstance().set(11, 4, -6, 7);
+        V actual = vector.normalise();
+        V expected = vector.set(25, -4, 3, 2).divide(length);
 
-		float actual = vector.angle(otherVector);
+        assertSame(actual, vector);
+        assertEquals(expected, actual);
+    }
 
-		float length = vector.length();
-		float otherLength = otherVector.length();
-		float result = vector.dot(otherVector) / (length * otherLength);
-		result = Math.max(-1, Math.min(1, result));
-
-		float expected = (float) Math.acos(result);
-		float precision = 0.000001f;
-
-		assertEquals(expected, actual, precision);
-	}
-
-	@Test
-	public void angleBetweenThisVectorAndAZeroVectorThrowsAnIllegalArgumentException()
-	{
-		vector.set(1, 2, -4, 8);
-
-		V otherVector = newVectorInstance();
-
-		assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
-				"Can't find angle when one or both vectors have length of 0.");
+    @Test
+    public void normaliseZeroVectorThrowsIllegalArgumentException() {
+        assertThrows(IllegalStateException.class, () -> vector.normalise(),
+                "Can not normalise a vector of zero length.");
+    }
 
 
-	}
+    // Angle Method Tests
 
-	@Test
-	public void angleBetweenThisZeroVectorAndAnotherVectorThrowsAnIllegalArgumentException()
-	{
-		V otherVector = newVectorInstance().set(11, 5, -9, 0);
+    @Test
+    public void angleBetweenTwoNonZeroVectors() {
+        vector.set(-2, 4, -3, 2);
 
-		assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
-				"Can't find angle when one or both vectors have length of 0.");
-	}
+        V otherVector = newVectorInstance().set(11, 4, -6, 7);
 
-	@Test
-	public void angleBetweenZeroVectorsThrowsAnIllegalArgumentException()
-	{
-		V otherVector = newVectorInstance();
+        float actual = vector.angle(otherVector);
 
-		assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
-				"Can't find angle when one or both vectors have length of 0.");
-	}
+        float length = vector.length();
+        float otherLength = otherVector.length();
+        float result = vector.dot(otherVector) / (length * otherLength);
+        result = Math.max(-1, Math.min(1, result));
 
-	@Test
-	public void angleBetweenVectorAndNullThrowsAnIllegalArgumentException()
-	{
-		assertThrows(IllegalArgumentException.class, () -> vector.angle(null),
-				"The input Vector cannot be null.");
-	}
+        float expected = (float) Math.acos(result);
+        float precision = 0.000001f;
+
+        assertEquals(expected, actual, precision);
+    }
+
+    @Test
+    public void angleBetweenThisVectorAndAZeroVectorThrowsAnIllegalArgumentException() {
+        vector.set(1, 2, -4, 8);
+
+        V otherVector = newVectorInstance();
+
+        assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
+                "Can't find angle when one or both vectors have length of 0.");
+
+
+    }
+
+    @Test
+    public void angleBetweenThisZeroVectorAndAnotherVectorThrowsAnIllegalArgumentException() {
+        V otherVector = newVectorInstance().set(11, 5, -9, 0);
+
+        assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
+                "Can't find angle when one or both vectors have length of 0.");
+    }
+
+    @Test
+    public void angleBetweenZeroVectorsThrowsAnIllegalArgumentException() {
+        V otherVector = newVectorInstance();
+
+        assertThrows(IllegalArgumentException.class, () -> vector.angle(otherVector),
+                "Can't find angle when one or both vectors have length of 0.");
+    }
+
+    @Test
+    public void angleBetweenVectorAndNullThrowsAnIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> vector.angle(null),
+                "The input Vector cannot be null.");
+    }
 }

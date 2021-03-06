@@ -1,6 +1,5 @@
 package org.clowdy.output;
 
-public class Window
-{
+public class Window {
 
 }

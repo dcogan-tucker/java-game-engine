@@ -1,6 +1,5 @@
 package org.clowdy.output;
 
-public class Display
-{
+public class Display {
 
 }
