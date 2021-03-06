@@ -9,7 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * <p>EntityBuilder employs the builder design pattern to create entity instances. The user can chain method calls
+ * to decide what components the Entity should be built with. Before being built the Components are stored in a Map
+ * structure that limits the builder to one instance of each Component type./p>
  *
+ * @author Dominic Cogan-Tucker
  */
 public class EntityBuilder {
     // Map of Component to be added to Entity on build call.
