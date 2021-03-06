@@ -7,7 +7,7 @@ import org.clowdy.entity.Entity.ComponentManager;
 import javax.inject.Singleton;
 
 @Module
-class EntityUtilityModule {
+public class EntityUtilityModule {
     @Provides
     @Singleton
     static ComponentManager provideComponentManager() {

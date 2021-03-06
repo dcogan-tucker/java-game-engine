@@ -7,6 +7,6 @@ import javax.inject.Singleton;
 
 @Singleton
 @Component(modules = EntityUtilityModule.class)
-interface EntityUtilityFactory {
+public interface EntityUtilityFactory {
     EntityBuilder getBuilder();
 }
