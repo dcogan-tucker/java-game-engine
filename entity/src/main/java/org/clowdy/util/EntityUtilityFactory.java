@@ -6,8 +6,7 @@ import org.clowdy.entity.EntityBuilder;
 import javax.inject.Singleton;
 
 @Singleton
-@Component(modules = EntityBuilderModule.class)
-public interface EntityBuilderFactory
-{
-	EntityBuilder getBuilder();
+@Component(modules = EntityUtilityModule.class)
+public interface EntityUtilityFactory {
+    EntityBuilder getBuilder();
 }
