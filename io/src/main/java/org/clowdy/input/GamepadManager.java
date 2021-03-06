@@ -19,14 +19,13 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public class GamepadManager {
     /**
-     * The Gamepad connection callback.
-     */
-    private GLFWJoystickCallback gamepadCallback;
-
-    /**
      * An array of Gamepads of size 16 (maximum number of connected Gamepads).
      */
     protected static Gamepad[] gamepads = new Gamepad[GLFW_JOYSTICK_LAST];
+    /**
+     * The Gamepad connection callback.
+     */
+    private GLFWJoystickCallback gamepadCallback;
 
     /**
      * Constructs a GamepadManager, initialising a disconnected Gamepad for each
@@ -48,22 +47,6 @@ public class GamepadManager {
                 }
             }
         };
-    }
-
-    /**
-     * Returns the Gamepad connection callback.
-     *
-     * @return The Gamepad connection callback.
-     */
-    protected GLFWJoystickCallback getJoystickCallback() {
-        return gamepadCallback;
-    }
-
-    /**
-     * Frees the resources from the Gamepad connection callback.
-     */
-    protected void free() {
-        gamepadCallback.free();
     }
 
     /**
@@ -110,5 +93,21 @@ public class GamepadManager {
      */
     public static float axisState(int id, int axis) {
         return getGamepadState(id).axes(axis);
+    }
+
+    /**
+     * Returns the Gamepad connection callback.
+     *
+     * @return The Gamepad connection callback.
+     */
+    protected GLFWJoystickCallback getJoystickCallback() {
+        return gamepadCallback;
+    }
+
+    /**
+     * Frees the resources from the Gamepad connection callback.
+     */
+    protected void free() {
+        gamepadCallback.free();
     }
 }

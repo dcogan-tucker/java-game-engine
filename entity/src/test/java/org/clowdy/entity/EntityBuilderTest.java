@@ -1,8 +1,8 @@
 package org.clowdy.entity;
 
 import org.clowdy.component.Component;
-import org.clowdy.entity.Entity.ComponentManager;
 import org.clowdy.component.TestPhysicsComponent;
+import org.clowdy.entity.Entity.ComponentManager;
 import org.clowdy.util.DaggerEntityUtilityFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

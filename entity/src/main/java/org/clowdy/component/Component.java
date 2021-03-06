@@ -50,6 +50,7 @@ public abstract class Component {
 
     /**
      * Returns the hash code of this Component.
+     *
      * @return The hash code of this Component.
      */
     @Override

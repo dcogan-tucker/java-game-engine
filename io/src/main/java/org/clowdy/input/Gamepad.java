@@ -2,7 +2,6 @@ package org.clowdy.input;
 
 import org.lwjgl.glfw.GLFWGamepadState;
 
-import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.glfwGetGamepadState;
 
 /**

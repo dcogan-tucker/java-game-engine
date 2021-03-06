@@ -1,7 +1,6 @@
 package org.clowdy.util;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.Objects;
 
 /**

@@ -1,6 +1,6 @@
 package org.clowdy.entity;
 
-import org.clowdy.component.*;
+import org.clowdy.component.Component;
 import org.clowdy.component.Component.PoolType;
 
 import javax.inject.Singleton;
@@ -214,6 +214,7 @@ public class Entity {
 
         /**
          * Constructs a ComponentPool with the given PoolType.
+         *
          * @param poolType The PoolType for this ComponentPool.
          */
         protected ComponentPool(Component.PoolType poolType) {
@@ -223,6 +224,7 @@ public class Entity {
 
         /**
          * Returns the UUID for this ComponentPool.
+         *
          * @return This ComponentPool's UUID.
          */
         public UUID getId() {
@@ -231,6 +233,7 @@ public class Entity {
 
         /**
          * Returns the type of this ComponentPool.
+         *
          * @return The PoolType this ComponentPool is associated with.
          */
         public PoolType getPoolType() {
@@ -239,6 +242,7 @@ public class Entity {
 
         /**
          * Returns the number of Components in this ComponentPool.
+         *
          * @return The number of Components in this ComponentPool.
          */
         public int getSize() {
@@ -262,7 +266,6 @@ public class Entity {
          * null.
          *
          * @param componentClass The Component Class to get.
-         *
          * @return The Component of the given Class inside the pool, null if one doesn't exist.
          */
         public Component getComponent(Class<? extends Component> componentClass) {
@@ -274,7 +277,6 @@ public class Entity {
          * and is of the same PoolType, false otherwise.
          *
          * @param other The other Object to check against.
-         *
          * @return true if the given Object is a ComponentPool of the same PoolType and contains equal components.
          */
         @Override

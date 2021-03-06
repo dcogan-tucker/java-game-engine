@@ -39,6 +39,43 @@ final class Vbo {
     }
 
     /**
+     * Creates a new Vbo of a given type containing the given data.
+     *
+     * @param type The type of Vbo.
+     * @param data The data to be stored in the vbo.
+     * @return The generated Vbo.
+     */
+    protected static Vbo create(int type, float[] data) {
+        Vbo vbo = new Vbo(type);
+        vbo.bind();
+        vbo.storeData(data);
+        return vbo;
+    }
+
+    /**
+     * Creates a new Vbo of a given type containing the given data.
+     *
+     * @param type The type of Vbo.
+     * @param data The data to be stored in the vbo.
+     * @return The generated Vbo.
+     */
+    protected static Vbo create(int type, int[] data) {
+        Vbo vbo = new Vbo(type);
+        vbo.bind();
+        vbo.storeData(data);
+        return vbo;
+    }
+
+    /**
+     * Deletes the given Vbo.
+     *
+     * @param vbo The Vbo to delete.
+     */
+    protected static void delete(Vbo vbo) {
+        glDeleteBuffers(vbo.id);
+    }
+
+    /**
      * Binds this Vbo for use.
      */
     private void bind() {
@@ -83,42 +120,5 @@ final class Vbo {
      */
     private void storeData(IntBuffer buffer) {
         glBufferData(type, buffer, GL_STATIC_DRAW);
-    }
-
-    /**
-     * Creates a new Vbo of a given type containing the given data.
-     *
-     * @param type The type of Vbo.
-     * @param data The data to be stored in the vbo.
-     * @return The generated Vbo.
-     */
-    protected static Vbo create(int type, float[] data) {
-        Vbo vbo = new Vbo(type);
-        vbo.bind();
-        vbo.storeData(data);
-        return vbo;
-    }
-
-    /**
-     * Creates a new Vbo of a given type containing the given data.
-     *
-     * @param type The type of Vbo.
-     * @param data The data to be stored in the vbo.
-     * @return The generated Vbo.
-     */
-    protected static Vbo create(int type, int[] data) {
-        Vbo vbo = new Vbo(type);
-        vbo.bind();
-        vbo.storeData(data);
-        return vbo;
-    }
-
-    /**
-     * Deletes the given Vbo.
-     *
-     * @param vbo The Vbo to delete.
-     */
-    protected static void delete(Vbo vbo) {
-        glDeleteBuffers(vbo.id);
     }
 }
